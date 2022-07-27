@@ -14,13 +14,13 @@ def limit_memory(maxsize):
 
 limit_memory(16 * 10e9)
 
-moa = pd.read_csv('~/projects/ht_microscopy/moa.txt', sep="\t")
+moa = pd.read_csv('moa.txt', sep="\t")
 moas = list(moa['Metadata_broad_sample'])
 
 selected_drugs = moas
 selected_drugs += ['DMSO']
 
-dff = pd.read_csv('~/projects/ht_microscopy/feature_list.txt', sep="\t", header=None)
+dff = pd.read_csv('feature_list.txt', sep="\t", header=None)
 features = list(dff.iloc[:, 0])
 features += ['TableNumber', 'ImageNumber', 'ObjectNumber']
 
@@ -32,10 +32,10 @@ plates = [24277, 24280, 24293, 24294, 24295, 24296, 24297, 24300, 24301, 24302, 
 for pl in plates:
     # address
     os.system('wget ftp://parrot.genomics.cn/gigadb/pub/10.5524/100001_101000/100351/Plate_' + str(
-        pl) + '.tar.gz --directory-prefix=/../../media/drrohban/Data/celldata')
+        pl) + '.tar.gz --directory-prefix=/home/jupyter/Image_Analysis/edit/Data/test_data')
 
-    os.system('tar xvzf ~/../../media/drrohban/Data/celldata/Plate_' + str(pl) + '.tar.gz')
-    os.system('rm -rf ~/../../media/drrohban/Data/celldata/Plate_' + str(pl) + '.tar.gz')
+    os.system('tar xvzf /home/jupyter/Image_Analysis/edit/Data/test_data/Plate_' + str(pl) + '.tar.gz')
+    os.system('rm -rf /home/jupyter/Image_Analysis/edit/Data/test_data/Plate_' + str(pl) + '.tar.gz')
 
     # address
     path = 'gigascience_upload/Plate_' + str(pl) + '/extracted_features/' + str(pl) + '.sqlite'
@@ -63,7 +63,7 @@ for pl in plates:
     merged = merged.merge(wells, on=['TableNumber', 'ImageNumber'])
 
     # address
-    path = '~/../../media/drrohban/Data/celldata/gigascience_upload/Plate_' + str(
+    path = '/home/jupyter/Image_Analysis/edit/Data/test_data/gigascience_upload/Plate_' + str(
         pl) + '/profiles/mean_well_profiles.csv'
     mean_profile = pd.read_csv(path)
     broad_sample = mean_profile[['Metadata_Well', 'Metadata_broad_sample']]
@@ -77,7 +77,7 @@ for pl in plates:
     data = merged[merged['Metadata_broad_sample'].isin(selected_drugs)]
 
     conn.close()
-    os.system('rm -rf ~/../../media/drrohban/Data/celldata/gigascience_upload')
+    os.system('rm -rf /home/jupyter/Image_Analysis/edit/Data/test_data')
 
     data.to_csv('plate' + str(pl) + '.csv')
     print('####### plate saved!')
